@@ -27,5 +27,7 @@
 
 * Running
 
+  Doesn't run right now.
 
-  
+  - [ ] TODO make it run
+  - [ ] TODO make it give the right result
