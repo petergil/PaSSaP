@@ -1,27 +1,50 @@
-
+#include <iostream>
 #include "system.hxx"
 #include "particle_operations.hxx"
 
-int setup_system(){
+particle * setup_system(const int num){
+  ftype x, y, z;
+  particle particles[num];
+  for (int n=0; n < num; n++){
+    x = ((ftype) rand() / (RAND_MAX));
+    y = ((ftype) rand() / (RAND_MAX));
+    z = ((ftype) rand() / (RAND_MAX));
+    particles[n].pos.x = x;
+    particles[n].pos.y = y;
+    particles[n].pos.z = z;
+    x = ((ftype) rand() / (RAND_MAX));
+    y = ((ftype) rand() / (RAND_MAX));
+    z = ((ftype) rand() / (RAND_MAX));
+    particles[n].vel.x = x;
+    particles[n].vel.y = y;
+    particles[n].vel.z = z;
+    std::cout << "pos: " << particles[n].pos.x << " " <<  particles[n].pos.y << " " << particles[n].pos.z << "\t\t"
+              << "vel: " << particles[n].vel.x << " " <<  particles[n].vel.y << " " << particles[n].vel.z << "\n";
+    }
 
-  return 0;  
+  return particles;  
 }
 
-int run_system(){
+int run_system(particle * system, const int num){
 
   // BUG: These should be set in the setup_system() and then
   // passed to this function.
-  std::array<particle, 999> system;
+  //const unsigned int num = 400;
+  //std::array<particle, num> system;
+  //system = setup_system();
   ftype maxtime = 100.0;
-  const unsigned int num = 400;
-
 
   
-  ftype coltime[][num] = {{0, 0}, {0, 0}}; // table of collision times
-  ftype dt = 0;                            // time delta to collision
+  ftype ** coltime;// = {{0, 0}, {0, 0}}; // table of collision times
+  coltime = new ftype*[num];
+  for(unsigned int ii = 0; ii < num; ii++){
+    coltime[ii] = new ftype[num];
+  }
+  ftype dt = 1;                            // time delta to collision
   ftype systime = 0;                       // system time
   unsigned int a = 0;                      // first collision partner
   unsigned int b = 0;                      // second collision partner
+  unsigned int maxiter = 1000;             // max iterations
 
   while(systime < maxtime){
 
@@ -64,9 +87,13 @@ int run_system(){
     // (d) calulate properties of interest, ready for averaging, before returning to (a)
     // TODO: calculate.
     // Also, consistency checks.
+    systime += dt;
 
   }
-  
+  for(unsigned int ii = 0; ii < num; ii++){
+    delete[] coltime[ii];
+  }
+  delete[] coltime;
   return 0;
 }
 

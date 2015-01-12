@@ -11,9 +11,11 @@
   * TODO: Should either read state from a file or randomly
   * generate a state from a random seed + a desired temperature.
   *
+  * \param num number of particles in the system
+  *
   * Should return the built system.
   */
-int setup_system();
+particle * setup_system(const int num);
 
 /**
   * Run system.
@@ -22,9 +24,12 @@ int setup_system();
   * well as maxtime and other constraints. (maybe particle
   * radius?)
   *
+  * \param system an array of particles
+  * \param num number of particles in the system
+  *
   * Should return enough state to evaluate the result of the calulations.
   */
-int run_system();
+int run_system(particle * system, const int num);
 
 /**
   * Evaluate result.
