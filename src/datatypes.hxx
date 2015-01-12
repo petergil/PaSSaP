@@ -26,5 +26,4 @@ struct particle{
   // ftype radius = 1; // radius
 };
 
-
 #endif // PASSAP_DATATYPES_HXX

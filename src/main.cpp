@@ -10,9 +10,10 @@ int main(){
   std::cout << "Hello world!\n";
   // TODO: init mpi
 
-  setup_system();
+  const int num = 100;
+  particle * system = setup_system(num);
   
-  run_system();
+  run_system(system, num);
   
   evaluate_result();
 
