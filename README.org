@@ -1,0 +1,33 @@
+
+
+#+TITLE: Peter and Sarahs Super awesome Project
+
+* Introduction
+
+* Build instructions
+
+  To build the code:
+
+  #+BEGIN_SRC sh
+    mkdir build
+    cd build
+    cmake ..
+    make
+  #+END_SRC
+
+  To build the documentation:
+
+  #+BEGIN_SRC sh
+
+    # in the project root dir
+    doxygen
+
+  #+END_SRC
+
+
+* Running
+
+  Doesn't run right now.
+
+  - [ ] TODO make it run
+  - [ ] TODO make it give the right result
