@@ -35,6 +35,12 @@ vector3 sub(const vector3 &a, const vector3 &b);
   */
 ftype dot(const vector3 &a, const vector3 &b);
 
-
+/**
+  * Multiply a constant number to a vector
+  * @param n constant number
+  * @param a vetor
+  * @return {a.x * n, a.y*n, a.z * n}
+  * */
+vector3 multiply(const ftype n, vector3 a);
 
 #endif // PASSAP_VECTOR_MATH_HXX

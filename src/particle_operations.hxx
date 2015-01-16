@@ -35,4 +35,9 @@ void update_position(particle *par, ftype dt, ftype L);
   */
 void perform_collision(particle *a, particle *b);
 
+/**
+  * print particle info to stdout.
+  */ 
+void print_particle(const particle &p);
+
 #endif // PASSAP_PARTICLE_OPERATIONS_HXX
