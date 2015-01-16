@@ -66,14 +66,31 @@ int run_system(particle * system, const int num){
      * calculate collision time for each pair once.
      */
 
-    // num is number of 
+    // num is number of     
+    // smallest coltime -> dt
+    // coltime[ii][jj] = calculate_collision_time(system[ii], system[jj]);
+
     for(unsigned int ii = 0; ii < num ; ii++){
       for(unsigned int jj = ii + 1; jj < num; jj++){
-        coltime[ii][jj] = calculate_collision_time(system[ii], system[jj]);
-        // TODO: smallest coltime -> dt
+        ftype tmp = -1;
+        for(int z=-1; z<2; z++){
+	  for(int x=-1; x<2; x++){
+	    for(int y=-1; y<2; y++){
+	      tmp = calculate_collision_time(system[ii], mirror(system[jj], x, y, z));
+              if (tmp > 0){
+	        coltime[ii][jj] = tmp;
+		if (tmp < dt){
+                  dt = tmp;
+                  a = ii;
+                  b = jj;
+                }
+	      }
+	    }
+	  }
+        }
       }
     }
-  
+
     // (b) move all particles forward until collision occurs
 
     // TODO: parallelise (trivial in openmp, (probably) don't in mpi)
@@ -95,6 +112,13 @@ int run_system(particle * system, const int num){
   }
   delete[] coltime;
   return 0;
+}
+
+particle mirror(particle pp, int x, int y, int z){
+  pp.pos.x += x;
+  pp.pos.y += y;
+  pp.pos.z += z;
+  return pp;
 }
 
 int evaluate_result(){

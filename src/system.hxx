@@ -32,6 +32,18 @@ particle * setup_system(const int num);
 int run_system(particle * system, const int num);
 
 /**
+  * Mirroring particle in other cubs.
+  *
+  * \param pp the particle that we want to move in other cubes
+  * \param x pp.pos.x position moves x unit
+  * \param y pp.pos.y position moves y unit
+  * \param z pp.pos.z position moves z unit
+  *
+  * Should return particle's new position
+  * */
+particle mirror(particle pp, int x, int y, int z);
+
+/**
   * Evaluate result.
   *
   * TODO: Look up what results are interesting and then implement
