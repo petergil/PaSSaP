@@ -23,6 +23,11 @@ ftype dot(const vector3 &a, const vector3 &b){
 }
 
 
+vector3 multiply(const ftype n, vector3 a){
+  a.x *= n;
+  a.y *= n;
+  a.z *= n;
 
-
+  return a;
+}
 

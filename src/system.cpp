@@ -6,8 +6,8 @@ const ftype L = 1;
 
 particle * setup_system(const int num){
   ftype x, y, z;
-  particle particles[num];
-  for (int n=0; n < num; n++){
+  particle * particles = new particle[num];
+  /*for (int n=0; n < num; n++){
     x = ((ftype) rand() / (RAND_MAX));
     y = ((ftype) rand() / (RAND_MAX));
     z = ((ftype) rand() / (RAND_MAX));
@@ -22,12 +22,35 @@ particle * setup_system(const int num){
     particles[n].vel.z = z;
     std::cout << "pos: " << particles[n].pos.x << " " <<  particles[n].pos.y << " " << particles[n].pos.z << "\t\t"
               << "vel: " << particles[n].vel.x << " " <<  particles[n].vel.y << " " << particles[n].vel.z << "\n";
-    }
+    }*/
+
+  particles[0].pos.x = 0.5;
+  particles[0].pos.y = 0;
+  particles[0].pos.z = 0;
+
+  particles[0].vel.x = 0.1;
+  particles[0].vel.y = 0;
+  particles[0].vel.z = 0;
+
+  particles[1].pos.x = 0;
+  particles[1].pos.y = 0;
+  particles[1].pos.z = 0;
+
+  particles[1].vel.x = -0.1;
+  particles[1].vel.y = 0;
+  particles[1].vel.z = 0;
+
+
+  for(unsigned int ii = 0; ii < num; ii++){
+     print_particle(particles[ii]);
+  }
+
 
   return particles;  
 }
 
 int run_system(particle * system, const int num){
+
 
   // BUG: These should be set in the setup_system() and then
   // passed to this function.
@@ -75,6 +98,9 @@ int run_system(particle * system, const int num){
     for(unsigned int ii = 0; ii < num ; ii++){
       for(unsigned int jj = ii + 1; jj < num; jj++){
         ftype tmp = -1;
+        std::cout << "particles " << ii << " " << jj << "\n";
+        print_particle(system[ii]);
+        print_particle(system[jj]);
         for(int z=-L; z<=L; z += L){
 	  for(int x=-L; x<=L; x += L){
 	    for(int y=-L; y<=L; y += L){
@@ -95,13 +121,23 @@ int run_system(particle * system, const int num){
 
     // (b) move all particles forward until collision occurs
 
+
+    std::cout << "dt: " << dt << " a: " << a << " b: " << b << "\n";
     // TODO: parallelise (trivial in openmp, (probably) don't in mpi)
     for(unsigned int ii = 0; ii < num; ii++){
       update_position(&system[ii], dt, L);
+      std::cout << "updated " << ii << ":\n";
+      print_particle(system[ii]);
     }
-  
+
     // (c) collision dynamics for the colliding pair(s)
+    std::cout << "perform_collision\n";
     perform_collision(&system[a], &system[b]);
+
+    std::cout << "updated " << a << ":\n";
+    print_particle(system[a]);
+    std::cout << "updated " << b << ":\n";
+    print_particle(system[b]);
 
     // (d) calulate properties of interest, ready for averaging, before returning to (a)
     // TODO: calculate.
