@@ -2,6 +2,8 @@
 #include "system.hxx"
 #include "particle_operations.hxx"
 
+const ftype L = 1;
+
 particle * setup_system(const int num){
   ftype x, y, z;
   particle particles[num];
@@ -40,14 +42,14 @@ int run_system(particle * system, const int num){
   for(unsigned int ii = 0; ii < num; ii++){
     coltime[ii] = new ftype[num];
   }
-  ftype dt = 1;                            // time delta to collision
+  ftype dt = -1;                           // time delta to collision
   ftype systime = 0;                       // system time
   unsigned int a = 0;                      // first collision partner
   unsigned int b = 0;                      // second collision partner
   unsigned int maxiter = 1000;             // max iterations
 
   while(systime < maxtime){
-
+    dt = -1;
     // (a) locate next collision
 
     // TODO: 1) parallelise (trivial in openmp)
@@ -73,13 +75,13 @@ int run_system(particle * system, const int num){
     for(unsigned int ii = 0; ii < num ; ii++){
       for(unsigned int jj = ii + 1; jj < num; jj++){
         ftype tmp = -1;
-        for(int z=-1; z<2; z++){
-	  for(int x=-1; x<2; x++){
-	    for(int y=-1; y<2; y++){
+        for(int z=-L; z<=L; z += L){
+	  for(int x=-L; x<=L; x += L){
+	    for(int y=-L; y<=L; y += L){
 	      tmp = calculate_collision_time(system[ii], mirror(system[jj], x, y, z));
               if (tmp > 0){
 	        coltime[ii][jj] = tmp;
-		if (tmp < dt){
+		if (tmp < dt || dt < 0){
                   dt = tmp;
                   a = ii;
                   b = jj;
@@ -95,7 +97,7 @@ int run_system(particle * system, const int num){
 
     // TODO: parallelise (trivial in openmp, (probably) don't in mpi)
     for(unsigned int ii = 0; ii < num; ii++){
-      update_position(system[ii], dt);
+      update_position(&system[ii], dt, L);
     }
   
     // (c) collision dynamics for the colliding pair(s)

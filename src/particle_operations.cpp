@@ -52,6 +52,10 @@ ftype calculate_collision_time(const particle &a, const particle &b){
   return T_ab;
 }
 
-particle update_position(particle par, ftype dt){}
+void update_position(particle *par, ftype dt, ftype L){
+  par->pos.x = fabs(fmod(par->pos.x + par->vel.x * dt, L));
+  par->pos.y = fabs(fmod(par->pos.y + par->vel.y * dt, L));
+  par->pos.z = fabs(fmod(par->pos.z + par->vel.z * dt, L));
+}
 
 void perform_collision(particle *a, particle *b){}

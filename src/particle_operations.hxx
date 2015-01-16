@@ -21,11 +21,11 @@ ftype calculate_collision_time(const particle &a, const particle &b);
 /**
   * Update position of particle par.
   *
-  * par.pos + par.vel * dt
+  * fabs(fmod(par.pos.x + par.vel.x * dt, L))
   *
   *
   */
-particle update_position(particle par, ftype dt);
+void update_position(particle *par, ftype dt, ftype L);
 
 /**
   * Perform collision between particle a and b.
