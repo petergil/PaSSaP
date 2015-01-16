@@ -33,7 +33,7 @@ vector3 sub(const vector3 &a, const vector3 &b);
   * @param b Second vector
   * @return the resulting vector
   */
-vector3 dot(const vector3 &a, const vector3 &b);
+ftype dot(const vector3 &a, const vector3 &b);
 
 
 
