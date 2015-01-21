@@ -15,7 +15,7 @@
   *
   * Should return the built system.
   */
-particle * setup_system(const int num);
+particle * setup_system();
 
 /**
   * Run system.
