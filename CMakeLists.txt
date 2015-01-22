@@ -25,11 +25,12 @@ endif()
 include_directories(${MPI_INCLUDE_PATH})
 
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -pedantic -std=c++11")
 
 
-set(passap_SRCS src/main.cpp src/particle_operations.cpp src/system.cpp src/vector_math.cpp )
+set(passap_SRCS src/particle_operations.cpp src/system.cpp src/vector_math.cpp )
 
-add_executable(passap ${passap_SRCS})
+add_executable(passap src/main.cpp ${passap_SRCS})
+add_executable(setup_system src/setup_system.cpp ${passap_SRCS})
 target_link_libraries(passap ${MPI_LIBRARIES})
 

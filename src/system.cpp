@@ -1,29 +1,69 @@
 #include <iostream>
 #include "system.hxx"
 #include "particle_operations.hxx"
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
+
 
 const ftype L = 1;
 
-particle * setup_system(const int num){
+particle * setup_system(){
   ftype x, y, z;
-  particle * particles = new particle[num];
-  /*for (int n=0; n < num; n++){
-    x = ((ftype) rand() / (RAND_MAX));
-    y = ((ftype) rand() / (RAND_MAX));
-    z = ((ftype) rand() / (RAND_MAX));
-    particles[n].pos.x = x;
-    particles[n].pos.y = y;
-    particles[n].pos.z = z;
-    x = ((ftype) rand() / (RAND_MAX));
-    y = ((ftype) rand() / (RAND_MAX));
-    z = ((ftype) rand() / (RAND_MAX));
-    particles[n].vel.x = x;
-    particles[n].vel.y = y;
-    particles[n].vel.z = z;
-    std::cout << "pos: " << particles[n].pos.x << " " <<  particles[n].pos.y << " " << particles[n].pos.z << "\t\t"
-              << "vel: " << particles[n].vel.x << " " <<  particles[n].vel.y << " " << particles[n].vel.z << "\n";
-    }*/
+  ftype sigma;
+  int num;
+  std::string temp;
+  std::vector<std::string> items;
+  std::ifstream inputFile;
+  particle * particles;
+  int kk = 0;
 
+  inputFile.exceptions(std::ifstream::failbit | std::ifstream::badbit );
+  try {
+    inputFile.open("particles_file.txt");
+    std::string line="";
+    while (! inputFile.eof() ){
+      getline(inputFile, line); 
+      std::stringstream linestream(line);
+      int ll = 0;
+      while ( ! linestream.eof() && getline(linestream, temp, '\t')){
+        items.push_back(temp);
+      }
+      inputFile.peek();
+    }
+    unsigned int num;
+    num = atoi(items[0].c_str());
+    ftype sigma = std::stod (items[1]);
+    //std::cout << "num : " << num << " sigma: " << sigma << " size: " << items.size() << "\n"; 
+    particles = new particle[num];
+    int n = 0;
+    for(int ii = 0; ii < num; ii++){
+      n = 2 + ii * 6;
+      particles[ii].pos.x = std::stod (items[n + 0]);
+      particles[ii].pos.y = std::stod (items[n + 1]);
+      particles[ii].pos.z = std::stod (items[n + 2]);
+      particles[ii].vel.x = std::stod (items[n + 3]);
+      particles[ii].vel.y = std::stod (items[n + 4]);
+      particles[ii].vel.z = std::stod (items[n + 5]);
+    }
+
+  }
+  catch (std::ifstream::failure e){
+    std::cout << "Exception opening/reading particles file \n";
+    std::cerr << "exception caught: " << e.what() << '\n';
+    return 0;
+  }
+
+  inputFile.close();
+  for(unsigned int ii = 0; ii < num; ii++){
+     print_particle(particles[ii]);
+  }
+
+  return particles;
+}
+
+/*
   particles[0].pos.x = 0.5;
   particles[0].pos.y = 0;
   particles[0].pos.z = 0;
@@ -40,14 +80,10 @@ particle * setup_system(const int num){
   particles[1].vel.y = 0;
   particles[1].vel.z = 0;
 
-
-  for(unsigned int ii = 0; ii < num; ii++){
-     print_particle(particles[ii]);
-  }
+*/
 
 
-  return particles;  
-}
+
 
 int run_system(particle * system, const int num){
 
