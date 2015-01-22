@@ -37,7 +37,20 @@ void perform_collision(particle *a, particle *b);
 
 /**
   * print particle info to stdout.
+  * \todo more pretty-printing
+  * \param p particle to print
+  *
   */ 
 void print_particle(const particle &p);
+
+/**
+  * Zap coordinate back into unit cell after overshooting it.
+  *
+  * \todo  exception on abs(coord) > 2*L (this means that we have exceeded /c/ in this reference frame)
+  *
+  * \param coord coordinate
+  * \param L size of unit cell
+  */
+ftype wraparound(ftype coord, ftype L);
 
 #endif // PASSAP_PARTICLE_OPERATIONS_HXX

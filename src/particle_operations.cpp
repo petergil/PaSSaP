@@ -49,9 +49,11 @@ ftype calculate_collision_time(const particle &a, const particle &b){
     B_ab_pow2 = B_ab * B_ab;
     R_ab_pow2 = dot(R_ab, R_ab);
 
-    if( pow(B_ab, 2) - V_ab_pow2 * (R_ab_pow2 - pow(SIGMA, 2)) >= 0){  
-      ftype delta = B_ab_pow2 - V_ab_pow2 * (R_ab_pow2 - pow(SIGMA, 2));
-      T_ab = (-B_ab - sqrt(delta)) / V_ab_pow2;
+    // expression that is under the square root in the expression.
+    ftype under_sqrt = B_ab_pow2 - V_ab_pow2 * (R_ab_pow2 - pow(SIGMA, 2));
+
+    if(under_sqrt  >= 0){
+      T_ab = (-B_ab - sqrt(under_sqrt)) / V_ab_pow2;
     } else{ // complex roots, no collision
        T_ab = -1;
     }
