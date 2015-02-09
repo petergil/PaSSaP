@@ -49,7 +49,7 @@ particle mirror(particle pp, int x, int y, int z);
   * TODO: Look up what results are interesting and then implement
   * calculations.
   */
-int evaluate_result();
+int * evaluate_result(particle * pp, int n);
 
 /**
   * Print result.

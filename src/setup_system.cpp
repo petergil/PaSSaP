@@ -3,10 +3,17 @@
 #include <fstream>
 #include <math.h> 
 
+#include <random>
+
 int main(){
   ftype x, y, z, delta;
   int num;
   ftype sigma;
+
+  std::random_device rd;
+  std::default_random_engine el(rd());
+
+  std::uniform_real_distribution<ftype> uniform_dist(-1,1);
 
   std::cout << "\n Enter number of particles: ";
   std::cin >> num;
@@ -17,15 +24,15 @@ int main(){
   particle * particles = new particle[num];
   int n = 0;
   while ( n < num){
-    x = ((ftype) rand() / (RAND_MAX));
-    y = ((ftype) rand() / (RAND_MAX));
-    z = ((ftype) rand() / (RAND_MAX));
+    x = ((ftype) uniform_dist(el));
+    y = ((ftype) uniform_dist(el));
+    z = ((ftype) uniform_dist(el));
     particles[n].pos.x = x;
     particles[n].pos.y = y;
     particles[n].pos.z = z;
-    x = ((ftype) rand() / (RAND_MAX));
-    y = ((ftype) rand() / (RAND_MAX));
-    z = ((ftype) rand() / (RAND_MAX));
+    x = ((ftype) uniform_dist(el));
+    y = ((ftype) uniform_dist(el));
+    z = ((ftype) uniform_dist(el));
     particles[n].vel.x = x;
     particles[n].vel.y = y;
     particles[n].vel.z = z;

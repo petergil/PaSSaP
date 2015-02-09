@@ -19,10 +19,12 @@ int main(){
     std::cout << "particle: " << ii << "\n";
     print_particle(system[ii]);
   }
-  return 0;
+  //return 0;
   run_system(system, num);
-  
-  evaluate_result();
+ 
+  int * distances = evaluate_result(system, num); 
+  for (int i=0; i<100; i++)
+    std::cout << "distances[" << i << "]: "<< distances[i] << "\n";
 
   print_result();
   

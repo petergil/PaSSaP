@@ -1,5 +1,6 @@
 
 #include "vector_math.hxx"
+#include <math.h> 
 
 vector3 add(const vector3 &a, const vector3 &b){
   vector3 c;
@@ -31,3 +32,8 @@ vector3 multiply(const ftype n, vector3 a){
   return a;
 }
 
+ftype distanceof(const vector3 &a, const vector3 &b){
+  vector3 temp = sub(a, b);
+  ftype dist = sqrt(pow(temp.x, 2) + pow(temp.y, 2) + pow(temp.z, 2));
+  return dist;
+}

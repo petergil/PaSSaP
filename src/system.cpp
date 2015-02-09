@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 #include <sstream>
-
+#include <math.h> 
+#include "vector_math.hxx"
 
 const ftype L = 1;
 
@@ -93,7 +94,7 @@ int run_system(particle * system, const int num){
   //const unsigned int num = 400;
   //std::array<particle, num> system;
   //system = setup_system();
-  ftype maxtime = 100.0;
+  ftype maxtime = 10.0;
 
   
   ftype ** coltime;// = {{0, 0}, {0, 0}}; // table of collision times
@@ -106,9 +107,11 @@ int run_system(particle * system, const int num){
   unsigned int a = 0;                      // first collision partner
   unsigned int b = 0;                      // second collision partner
   unsigned int maxiter = 1000;             // max iterations
+  unsigned int iter = 0;
 
-  while(systime < maxtime){
+  while(systime < maxtime && iter < maxiter){
     dt = -1;
+    iter++;
     // (a) locate next collision
 
     // TODO: 1) parallelise (trivial in openmp)
@@ -134,9 +137,9 @@ int run_system(particle * system, const int num){
     for(unsigned int ii = 0; ii < num ; ii++){
       for(unsigned int jj = ii + 1; jj < num; jj++){
         ftype tmp = -1;
-        std::cout << "particles " << ii << " " << jj << "\n";
-        print_particle(system[ii]);
-        print_particle(system[jj]);
+        //std::cout << "particles " << ii << " " << jj << "\n";
+        //print_particle(system[ii]);
+        //print_particle(system[jj]);
         for(int z=-L; z<=L; z += L){
 	  for(int x=-L; x<=L; x += L){
 	    for(int y=-L; y<=L; y += L){
@@ -162,18 +165,18 @@ int run_system(particle * system, const int num){
     // TODO: parallelise (trivial in openmp, (probably) don't in mpi)
     for(unsigned int ii = 0; ii < num; ii++){
       update_position(&system[ii], dt, L);
-      std::cout << "updated " << ii << ":\n";
+      //std::cout << "updated " << ii << ":\n";
       print_particle(system[ii]);
     }
 
     // (c) collision dynamics for the colliding pair(s)
-    std::cout << "perform_collision\n";
+    //std::cout << "perform_collision\n";
     perform_collision(&system[a], &system[b]);
 
-    std::cout << "updated " << a << ":\n";
-    print_particle(system[a]);
-    std::cout << "updated " << b << ":\n";
-    print_particle(system[b]);
+    //std::cout << "updated " << a << ":\n";
+    //print_particle(system[a]);
+    //std::cout << "updated " << b << ":\n";
+    //print_particle(system[b]);
 
     // (d) calulate properties of interest, ready for averaging, before returning to (a)
     // TODO: calculate.
@@ -195,9 +198,21 @@ particle mirror(particle pp, int x, int y, int z){
   return pp;
 }
 
-int evaluate_result(){
+int * evaluate_result(particle * pp, int n){
+  //int x = pow(n, 2) - n;
+  int * distances = new int[100];
+  for(int ii = 0; ii < 100; ii++){
+    distances[ii] = 0;
+  }
 
-  return 0;
+  for(int ii = 0; ii < n; ii++)
+    for(int jj = 0; jj < n; jj++){
+      if (ii != jj){
+        ftype dist = distanceof(pp[ii].pos, pp[jj].pos);
+        distances[(int)floor(dist*n)] +=1;
+      }
+    }
+  return distances;
 }
 
 int print_result(){
