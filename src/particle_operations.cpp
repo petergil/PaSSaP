@@ -14,7 +14,7 @@ void print_particle(const particle &p){
 }
 
 ftype calculate_collision_time(const particle &a, const particle &b){
-  std::cout << "calculate_collision_time\n"; 
+  //std::cout << "calculate_collision_time\n"; 
   // T_ab is time of collision 
   ftype T_ab;
 
@@ -62,13 +62,13 @@ ftype calculate_collision_time(const particle &a, const particle &b){
     T_ab = -1;
   }
 
-  if(T_ab != T_ab || T_ab >= 0){
-    std::cout << "a:\n";
-    print_particle(a);
-    std::cout << "b:\n";
-    print_particle(b);
-    std::cout << "Time: " << T_ab << "\n";
-  }
+  //if(T_ab != T_ab || T_ab >= 0){
+    //std::cout << "a:\n";
+    //print_particle(a);
+    //std::cout << "b:\n";
+    //print_particle(b);
+    //std::cout << "Time: " << T_ab << "\n";
+  //}
   return T_ab;
 }
 
@@ -81,11 +81,11 @@ ftype wraparound(ftype coord, ftype L){
 }
 
 void update_position(particle *par, ftype dt, ftype L){
-  std::cout << "p.x " << par->pos.x << " p.v " << par->vel.x*dt<<"\n";
-  std::cout << "fmod " << fmod(par->pos.x + par->vel.x * dt, L) <<"\n";
+  //std::cout << "p.x " << par->pos.x << " p.v " << par->vel.x*dt<<"\n";
+  //std::cout << "fmod " << fmod(par->pos.x + par->vel.x * dt, L) <<"\n";
   par->pos.x = wraparound(fmod(par->pos.x + par->vel.x * dt, L), L);
 
-  std::cout << "p.x " << par->pos.x << " p.v " << par->vel.x*dt<<"\n";
+  //std::cout << "p.x " << par->pos.x << " p.v " << par->vel.x*dt<<"\n";
   par->pos.y = wraparound(fmod(par->pos.y + par->vel.y * dt, L), L);
   par->pos.z = wraparound(fmod(par->pos.z + par->vel.z * dt, L), L);
 
