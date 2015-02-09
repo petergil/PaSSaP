@@ -43,4 +43,14 @@ ftype dot(const vector3 &a, const vector3 &b);
   * */
 vector3 multiply(const ftype n, vector3 a);
 
+
+ftype distanceof(const vector3 &a, const vector3 &b);
+/** 
+  * Calculate distance between two particles
+  * @param a  First vector
+  * @param b Second vector
+  * @return the resulting value
+  * */
+
+
 #endif // PASSAP_VECTOR_MATH_HXX
