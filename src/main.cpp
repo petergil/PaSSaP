@@ -22,7 +22,7 @@ int main(){
   //return 0;
   run_system(system, num);
  
-  int * distances = evaluate_result(system, num); 
+  ftype * distances = evaluate_result(system, num); 
   for (int i=0; i<100; i++)
     std::cout << "distances[" << i << "]: "<< distances[i] << "\n";
 

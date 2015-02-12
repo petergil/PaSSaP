@@ -100,7 +100,12 @@ void perform_collision(particle *a, particle *b){
   R_ab = sub(a->pos, b->pos);
   V_ab = sub(a->vel, b->vel);
   B_ab = dot(R_ab, V_ab);
-  vector3 dv = multiply(-(B_ab / pow(SIGMA, 2)), R_ab);
+  
+  B_ab = -1 * B_ab;
+  ftype sigma2 = pow(SIGMA, 2);
+  
+  // v(i) = -(b(ij) / sigma^2) * r(ij)
+  vector3 dv = multiply( B_ab / sigma2, R_ab );
 
   a->vel = add(a->vel, dv);
   b->vel = sub(b->vel, dv);
