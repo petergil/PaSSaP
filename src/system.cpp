@@ -13,7 +13,7 @@ const ftype L = 1;
 particle * setup_system(){
   //ftype x, y, z;
   //ftype sigma;
-  int num = 0;
+  unsigned int num = 0;
   std::string temp;
   std::vector<std::string> items;
   std::ifstream inputFile;
@@ -32,13 +32,12 @@ particle * setup_system(){
       }
       inputFile.peek();
     }
-    unsigned int num;
     num = atoi(items[0].c_str());
     //ftype sigma = std::stod (items[1]);
     //std::cout << "num : " << num << " sigma: " << sigma << " size: " << items.size() << "\n"; 
     particles = new particle[num];
     int n = 0;
-    for(int ii = 0; ii < num; ii++){
+    for(unsigned int ii = 0; ii < num; ii++){
       n = 2 + ii * 6;
       particles[ii].pos.x = std::stod (items[n + 0]);
       particles[ii].pos.y = std::stod (items[n + 1]);
@@ -85,7 +84,7 @@ particle * setup_system(){
 
 
 
-int run_system(particle * system, const int num){
+int run_system(particle * system, const unsigned int num){
 
 
   // BUG: These should be set in the setup_system() and then

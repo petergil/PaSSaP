@@ -29,7 +29,7 @@ particle * setup_system();
   *
   * Should return enough state to evaluate the result of the calulations.
   */
-int run_system(particle * system, const int num);
+int run_system(particle * system, const unsigned int num);
 
 /**
   * Mirroring particle in other cubs.
