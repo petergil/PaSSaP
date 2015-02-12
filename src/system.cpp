@@ -11,14 +11,13 @@
 const ftype L = 1;
 
 particle * setup_system(){
-  ftype x, y, z;
-  ftype sigma;
-  int num;
+  //ftype x, y, z;
+  //ftype sigma;
+  int num = 0;
   std::string temp;
   std::vector<std::string> items;
   std::ifstream inputFile;
   particle * particles;
-  int kk = 0;
 
   inputFile.exceptions(std::ifstream::failbit | std::ifstream::badbit );
   try {
@@ -27,7 +26,7 @@ particle * setup_system(){
     while (! inputFile.eof() ){
       getline(inputFile, line); 
       std::stringstream linestream(line);
-      int ll = 0;
+      //int ll = 0;
       while ( ! linestream.eof() && getline(linestream, temp, '\t')){
         items.push_back(temp);
       }
@@ -35,7 +34,7 @@ particle * setup_system(){
     }
     unsigned int num;
     num = atoi(items[0].c_str());
-    ftype sigma = std::stod (items[1]);
+    //ftype sigma = std::stod (items[1]);
     //std::cout << "num : " << num << " sigma: " << sigma << " size: " << items.size() << "\n"; 
     particles = new particle[num];
     int n = 0;
@@ -109,7 +108,10 @@ int run_system(particle * system, const int num){
   unsigned int maxiter = 1000;             // max iterations
   unsigned int iter = 0;
 
+
+  std::cout << "Starting simulation\n";
   while(systime < maxtime && iter < maxiter){
+    std::cout << "Iteration number: " << iter << "\n";
     dt = -1;
     iter++;
     // (a) locate next collision
@@ -162,15 +164,25 @@ int run_system(particle * system, const int num){
 
 
     std::cout << "dt: " << dt << " a: " << a << " b: " << b << "\n";
+    std::cout << "Updated particle positions:\n";
     // TODO: parallelise (trivial in openmp, (probably) don't in mpi)
     for(unsigned int ii = 0; ii < num; ii++){
       update_position(&system[ii], dt, L);
       //std::cout << "updated " << ii << ":\n";
       print_particle(system[ii]);
+      for(unsigned int jj = 0; jj < ii; jj++){
+        if (distanceof(system[ii].pos,system[jj].pos) <= 0.1){
+          std::cout << "Intersecting atoms! " << ii << " " << jj << ", distance:" << distanceof(system[ii].pos,system[jj].pos) << "\n";
+          print_particle(system[ii]);
+          print_particle(system[jj]);
+          goto exit; // system is in an inconsistent state.
+        }
+      }
     }
 
     // (c) collision dynamics for the colliding pair(s)
     //std::cout << "perform_collision\n";
+    
     perform_collision(&system[a], &system[b]);
 
     //std::cout << "updated " << a << ":\n";
@@ -184,6 +196,7 @@ int run_system(particle * system, const int num){
     systime += dt;
 
   }
+  exit:
   for(unsigned int ii = 0; ii < num; ii++){
     delete[] coltime[ii];
   }
@@ -198,11 +211,17 @@ particle mirror(particle pp, int x, int y, int z){
   return pp;
 }
 
-int * evaluate_result(particle * pp, int n){
+ftype * evaluate_result(particle * pp, int n){
   //int x = pow(n, 2) - n;
+  int partitions = 100;
+  ftype dr = 1.0 / partitions;
+
   int * distances = new int[100];
+  ftype * radial_distribution = new ftype[100];
+
   for(int ii = 0; ii < 100; ii++){
     distances[ii] = 0;
+    radial_distribution[ii] = 0;
   }
 
   for(int ii = 0; ii < n; ii++)
@@ -212,7 +231,15 @@ int * evaluate_result(particle * pp, int n){
         distances[(int)floor(dist*n)] +=1;
       }
     }
-  return distances;
+  
+  for(int ii = 0; ii < 100; ii++)
+    std::cout << distances[ii] << "  ";
+
+  for(int ii = 0; ii < 100; ii++)
+    if (distances[ii] != 0)
+      radial_distribution[ii] =  pow(n, 2) * distances[ii]  / ( 4 * 3.14 *  pow((ii+1) * dr, 2) * dr );
+  
+  return radial_distribution;
 }
 
 int print_result(){

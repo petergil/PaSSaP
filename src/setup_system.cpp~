@@ -1,12 +1,9 @@
-#include "setup_system.hxx"
 #include "system.hxx"
 #include <iostream>
 #include <fstream>
 #include <math.h> 
 
 #include <random>
-
-const ftype L = 1;
 
 int main(){
   ftype x, y, z, delta;
@@ -24,12 +21,11 @@ int main(){
   std::cout << "\n Enter number of particles: ";
   std::cin >> num;
 
-  std::cout << "\n Enter particle's diameter: ";
+  std::cout << "\n Enter particle's radius: ";
   std::cin >> sigma;
 
   particle * particles = new particle[num];
   int n = 0;
-  
   while ( n < num){
     collided = false;
     x = ((ftype) position_dist(el));
@@ -45,28 +41,19 @@ int main(){
     particles[n].vel.y = y;
     particles[n].vel.z = z;
     for(int i=0; i < n; i++){
-
-      for(int z=-L; z<=L; z += L){
-        for(int x=-L; x<=L; x += L){
-          for(int y=-L; y<=L; y += L){
-            delta = calculate_delta(particles[n], mirror(particles[i], x, y, z));
-            if ( sqrt(delta) <= sigma + 0.0001 ){
-              collided = true;
-              break;
-            }
-          }
-          if(collided) break;
-          }
-        if(collided) break;
-        }
-      if(collided) break;
-      } 
+      delta = (pow(particles[n].pos.x - particles[i].pos.x, 2)) + (pow(particles[n].pos.y - particles[i].pos.y, 2)) + (pow(particles[n].pos.z - particles[i].pos.z, 2));
+      if ( sqrt(delta) <= 2 * sigma){
+        collided = true;
+        std::cout << "i " << i << "-------------------\n";
+        break;
+      }
+    }
     if(!collided){
+      n++;
+      std::cout << "n is " << n << "  ";
       std::cout << "pos: " << particles[n].pos.x << " " <<  particles[n].pos.y << " " << particles[n].pos.z << "\t\t"
                 << "vel: " << particles[n].vel.x << " " <<  particles[n].vel.y << " " << particles[n].vel.z << "\n";
-      n++;
     }
-    
   }
 
   std::ofstream particles_file;
@@ -80,7 +67,4 @@ int main(){
   return 0;
 }
 
-ftype calculate_delta(particle p1, particle p2){
- return (pow(p1.pos.x - p2.pos.x, 2)) + (pow(p1.pos.y - p2.pos.y, 2)) + (pow(p1.pos.z - p2.pos.z, 2));
-}
 
