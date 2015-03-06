@@ -99,6 +99,9 @@ int run_system(particle * system, const unsigned int num){
   coltime = new ftype*[num];
   for(unsigned int ii = 0; ii < num; ii++){
     coltime[ii] = new ftype[num];
+    for(unsigned int jj = 0; jj < num; jj++){
+      coltime[ii][jj] = 0;
+    }
   }
   ftype dt = -1;                           // time delta to collision
   ftype systime = 0;                       // system time
@@ -171,7 +174,7 @@ int run_system(particle * system, const unsigned int num){
       print_particle(system[ii]);
       for(unsigned int jj = 0; jj < ii; jj++){
         if (distanceof(system[ii].pos,system[jj].pos) <= 0.1){
-          std::cout << "Intersecting atoms! " << ii << " " << jj << ", distance:" << distanceof(system[ii].pos,system[jj].pos) << "\n";
+          std::cout << "Intersecting atoms! " << ii << " " << jj << ", distance: " << distanceof(system[ii].pos,system[jj].pos) << "\n";
           print_particle(system[ii]);
           print_particle(system[jj]);
           goto exit; // system is in an inconsistent state.

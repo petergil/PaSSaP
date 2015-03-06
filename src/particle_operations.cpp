@@ -16,22 +16,19 @@ void print_particle(const particle &p){
 ftype calculate_collision_time(const particle &a, const particle &b){
   //std::cout << "calculate_collision_time\n"; 
   // T_ab is time of collision 
-  ftype T_ab;
+  ftype T_ab = 0;
 
   // r(a,b) = r(a) - r(b)
   // r is the position
-  vector3 R_ab;
-  R_ab = sub(a.pos, b.pos);
+  vector3 R_ab = sub(a.pos, b.pos);
   
   // v(a,b) = v(a) - v(b)
   // v is the velocity 
-  vector3 V_ab;
-  V_ab = sub(a.vel, b.vel);
+  vector3 V_ab = sub(a.vel, b.vel);
 
   // b(a,b) = r(a,b) * v(a,b)
   // b is the Dot Product
-  ftype B_ab;
-  B_ab = dot(R_ab, V_ab);
+  ftype B_ab = dot(R_ab, V_ab);
   
   if (B_ab < 0){
     // delta = b(a,b)^2 - v(a,b)^2 * (r(a,b)^2 - sigma^2)
